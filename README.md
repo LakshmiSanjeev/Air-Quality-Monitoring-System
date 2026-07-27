@@ -43,12 +43,9 @@ part, and [`images/circuit-diagram.png`](images/circuit-diagram.png) /
 [`images/hardware-setup.jpg`](images/hardware-setup.jpg) for the actual
 wiring used in this build.
 
-> The original design deck (see `docs/`) also scopes out MQ135, MQ2,
-> MQ9, and a PM2.5 particulate sensor running through an Arduino Uno as
-> an additional board. The physical prototype built and photographed
-> here uses a single MQ gas sensor + DHT11 wired directly to the
-> NodeMCU — the firmware in this repo matches that build. Extending to
-> the full multi-sensor array is a natural next step (see
+> The original design (see `docs/`) included additional sensors such as the MQ135, MQ2, MQ9, and a PM2.5 sensor connected through an Arduino Uno.
+> However, the prototype built for this project uses a single MQ gas sensor and a DHT11 sensor connected directly to the NodeMCU,
+> and the firmware in this repository shows that setup. Adding the remaining sensors from the original design is planned as a future improvement (see
 > [Future Improvements](#future-improvements)).
 
 ## Circuit
@@ -74,11 +71,6 @@ The Arduino sketch lives in [`firmware/air_quality_monitor/`](firmware/air_quali
 By default the sketch runs in Serial-only mode (`SEND_TO_CLOUD = false`)
 so you can verify sensor readings before wiring up any cloud/mobile app
 integration.
-
-**Note:** this sketch is a starting point scaffolded from the project
-design and hasn't been flashed to physical hardware — verify pin
-mappings and calibrate the `AQ_THRESHOLD_*` values in `config.h`
-against your own sensor before trusting the output.
 
 ## Functionality & Features
 
