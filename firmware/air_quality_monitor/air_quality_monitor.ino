@@ -13,12 +13,10 @@
  * Board package: install "esp8266" via Boards Manager, select "NodeMCU 1.0 (ESP-12E Module)" as the board.
  * -----------------------------------------------------------------------
  */
-
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <DHT.h>
-
 #include "config.h"
 
 DHT dht(DHT_PIN, DHT_TYPE);
