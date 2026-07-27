@@ -1,15 +1,8 @@
 /*
  * Air Quality Monitoring System
  * -----------------------------------------------------------------------
- * Board:    NodeMCU (ESP8266)
- * Sensors:  DHT11 (temperature + humidity), MQ-series gas sensor (analog)
- *
- * This is a STARTER sketch, scaffolded from the project's design deck
- * (docs/Air_Quality_Monitoring_System.pdf) and the physical wiring shown
- * in images/circuit-diagram.png and images/hardware-setup.jpg. It has
- * NOT been flashed to real hardware by Claude — please verify pin
- * mappings, sensor warm-up behavior, and calibration against your own
- * MQ sensor variant before relying on the output.
+ * Board: NodeMCU (ESP8266)
+ * Sensors: DHT11 (temperature + humidity), MQ-series gas sensor (analog)
  *
  * Required libraries (install via Arduino IDE Library Manager):
  *   - DHT sensor library (Adafruit)
@@ -17,8 +10,7 @@
  *   - ESP8266WiFi (bundled with the ESP8266 board package)
  *   - ESP8266HTTPClient (bundled with the ESP8266 board package)
  *
- * Board package: install "esp8266" via Boards Manager, select
- * "NodeMCU 1.0 (ESP-12E Module)" as the board.
+ * Board package: install "esp8266" via Boards Manager, select "NodeMCU 1.0 (ESP-12E Module)" as the board.
  * -----------------------------------------------------------------------
  */
 
@@ -41,7 +33,8 @@ void setup() {
 
   if (SEND_TO_CLOUD) {
     connectToWiFi();
-  } else {
+  } 
+  else {
     Serial.println();
     Serial.println("SEND_TO_CLOUD is false — running in Serial-only mode.");
     Serial.println("Set SEND_TO_CLOUD to true in config.h once your WiFi and endpoint are set.");
@@ -74,7 +67,8 @@ void connectToWiFi() {
     Serial.println();
     Serial.print("Connected. IP address: ");
     Serial.println(WiFi.localIP());
-  } else {
+  } 
+  else {
     Serial.println();
     Serial.println("WiFi connection failed — continuing in offline/Serial mode.");
   }
@@ -92,10 +86,10 @@ void takeReadingAndReport() {
 
   const char* airQuality = classifyAirQuality(mqRaw);
 
-  Serial.println("----------------------------------------");
+  Serial.println("- RESULTS -");
   Serial.print("Temperature: "); Serial.print(temperatureC); Serial.println(" C");
-  Serial.print("Humidity:    "); Serial.print(humidity); Serial.println(" %");
-  Serial.print("MQ raw ADC:  "); Serial.println(mqRaw);
+  Serial.print("Humidity: "); Serial.print(humidity); Serial.println(" %");
+  Serial.print("MQ raw ADC: "); Serial.println(mqRaw);
   Serial.print("Air Quality: "); Serial.println(airQuality);
 
   if (SEND_TO_CLOUD && WiFi.status() == WL_CONNECTED) {
@@ -103,12 +97,10 @@ void takeReadingAndReport() {
   }
 }
 
-// Placeholder classification. Calibrate AQ_THRESHOLD_* in config.h
-// against your own sensor and a known clean-air baseline reading.
 const char* classifyAirQuality(int mqRaw) {
   if (mqRaw >= AQ_THRESHOLD_HAZARDOUS) return "Hazardous";
-  if (mqRaw >= AQ_THRESHOLD_POOR)      return "Poor";
-  if (mqRaw >= AQ_THRESHOLD_MODERATE)  return "Moderate";
+  if (mqRaw >= AQ_THRESHOLD_POOR) return "Poor";
+  if (mqRaw >= AQ_THRESHOLD_MODERATE) return "Moderate";
   return "Good";
 }
 
@@ -120,19 +112,16 @@ void sendReadingToCloud(float temperatureC, float humidity, int mqRaw, const cha
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Authorization", String("Bearer ") + API_KEY);
 
-  String payload = String("{")
-    + "\"temperature\":" + String(temperatureC, 2) + ","
-    + "\"humidity\":" + String(humidity, 2) + ","
-    + "\"mq_raw\":" + String(mqRaw) + ","
-    + "\"air_quality\":\"" + airQuality + "\""
-    + "}";
+  String payload = String("{") + "\"temperature\":" + String(temperatureC, 2) + "," + "\"humidity\":" + String(humidity, 2) + ","
+  + "\"mq_raw\":" + String(mqRaw) + "," + "\"air_quality\":\"" + airQuality + "\"" + "}";
 
   int statusCode = http.POST(payload);
 
   if (statusCode > 0) {
     Serial.print("Cloud POST status: ");
     Serial.println(statusCode);
-  } else {
+  } 
+  else {
     Serial.print("Cloud POST failed: ");
     Serial.println(http.errorToString(statusCode));
   }
